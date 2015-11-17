@@ -1,4 +1,4 @@
-name := """twitter-vault-frontend"""
+name := """tweet-vault-frontend"""
 
 version := "1.0-SNAPSHOT"
 
