@@ -4,10 +4,11 @@ import java.io.File
 
 import com.typesafe.config.ConfigFactory
 import play.api._
-import play.api.libs.json.{JsNull, Json}
+import play.api.libs.json._
 import play.api.mvc._
 import twitter4j._
 import twitter4j.conf.ConfigurationBuilder
+import scala.collection.JavaConversions._
 
 class Application extends Controller {
 
@@ -31,8 +32,12 @@ class Application extends Controller {
 //      )
 //    )
 
-    val users = Twitter.getUsers("joe")
-    Ok(Json.obj("q" -> q))
+    val users = Twitter.getUsers(q)
+
+    val json = JsArray(users map {user =>
+      Json.obj("screenName" -> JsString(user.getScreenName))
+    })
+    Ok(json)
   }
 
 }
