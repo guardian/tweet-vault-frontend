@@ -1,5 +1,7 @@
-@(tweets: List[String])
+@import services._
+
+@(tweets: List[Tweet])
 
 @for(tweet <- tweets) {
-    <li class="list-group-item">@tweet</li>
+    <li class="list-group-item @if(tweet.status == "deleted"){list-group-item-danger}"><em>@tweet.status:</em> @tweet.text</li>
 }

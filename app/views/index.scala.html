@@ -22,9 +22,9 @@
                         <span class="input-group-addon" id="sizing-addon2">@@</span>
                         <input id="twitter-username" type="text" class="form-control" placeholder="Username" aria-describedby="sizing-addon2">
                     </div>
-                    <button class="btn btn-default">Add</button>
+                    <button class="add-user btn btn-default">Add</button>
                 </form>
-                <div class="list-group">
+                <div class="twitter-users list-group">
                     @for(user <- users) {
                         <a href="#" class="twitter-user list-group-item">@user</a>
                     }

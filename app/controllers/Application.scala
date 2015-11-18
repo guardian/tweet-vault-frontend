@@ -43,11 +43,16 @@ class Application extends Controller {
     Ok(Json.obj("users" -> ElasticSearchClient.getUsers.toString))
   }
 
+  def getUsersHtml = Action {
+    val users = ElasticSearchClient.getUsers
+    Ok(views.html.users(users))
+  }
+
   def getTweets(q: String) = Action {
     val tweets = ElasticSearchClient.getTweets(q)
 
     val json = JsArray(tweets map {tweet =>
-      Json.obj("text" -> JsString(tweet))
+      Json.obj("text" -> JsString(tweet.text))
     })
     Ok(Json.obj("tweets" -> json))
   }
@@ -55,6 +60,11 @@ class Application extends Controller {
   def getTweetsHtml(user: String) = Action {
     val tweets = ElasticSearchClient.getTweets(user)
     Ok(views.html.tweets(tweets))
+  }
+
+  def addUser(user: String) = Action {
+    ElasticSearchClient.addUser(user)
+    Ok(Json.obj("users" -> ElasticSearchClient.getUsers.toString))
   }
 
 }

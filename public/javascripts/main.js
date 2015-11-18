@@ -15,8 +15,16 @@ $('#twitter-username').typeahead(null, {
   source: twitterUsers
 });
 
-$('.twitter-user').click(function() {
-  $(this).toggleClass('active');
-  $(this).siblings().removeClass('active');
-  $('.user-tweets').load('/get-tweets-html?user='+$(this).text());
+$('.twitter-users').click('.twitter-user', function(e) {
+  $(e.target).toggleClass('active');
+  $(e.target).siblings().removeClass('active');
+  $('.user-tweets').load('/get-tweets-html?user='+$(e.target).text());
+});
+
+$('.add-user').click(function() {
+  $.get('/add-user?user='+$('#twitter-username').val()).done(function() {
+    setTimeout(function() {
+      $('.twitter-users').load('/get-users-html');
+    }, 1000);
+  })
 });

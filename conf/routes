@@ -6,8 +6,10 @@
 GET     /                           controllers.Application.index
 GET     /users                      controllers.Application.searchUsers(q)
 GET     /get-users                  controllers.Application.getUsers
+GET     /get-users-html             controllers.Application.getUsersHtml
 GET     /get-tweets                 controllers.Application.getTweets(q)
 GET     /get-tweets-html            controllers.Application.getTweetsHtml(user)
+GET     /add-user                   controllers.Application.addUser(user)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
