@@ -16,6 +16,7 @@ import org.elasticsearch.index.query.FilterBuilders._
 import org.elasticsearch.index.query.QueryBuilders._
 import org.elasticsearch.common.xcontent.XContentFactory
 import org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder
+import org.elasticsearch.search.sort.SortOrder
 
 object ElasticSearchClient {
 
@@ -39,6 +40,7 @@ object ElasticSearchClient {
     val searchRequest = client.prepareSearch(indexName).setTypes("tweet")
     val mqp = QueryBuilders.matchQuery("username", user)
     searchRequest.setQuery(mqp)
+    searchRequest.addSort("created_at", SortOrder.DESC)
     searchRequest.execute().actionGet().getHits.map(
       hit => {
         val json = parse(hit.getSourceAsString)
