@@ -1,0 +1,7 @@
+@import services._
+
+@(users: List[String])
+
+@for(user <- users) {
+    <a href="#" class="twitter-user list-group-item">@user</a>
+}
