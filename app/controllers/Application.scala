@@ -1,7 +1,5 @@
 package controllers
 
-import java.io.File
-
 import com.typesafe.config.ConfigFactory
 import play.api._
 import play.api.libs.json._
@@ -9,6 +7,7 @@ import play.api.mvc._
 import twitter4j._
 import twitter4j.conf.ConfigurationBuilder
 import scala.collection.JavaConversions._
+import services._
 
 class Application extends Controller {
 
@@ -51,18 +50,7 @@ object Twitter {
   }
 
   def getUsers(query: String) = {
-    val twitter = (new TwitterFactory(Util.twitterConfig)).getInstance()
+    val twitter = (new TwitterFactory(Config.twitter)).getInstance()
     twitter.searchUsers(query, 0)
   }
-}
-
-object Util {
-  val config = ConfigFactory.parseFile(new File("conf/keys.conf"))
-
-  val twitterConfig = new ConfigurationBuilder()
-    .setOAuthConsumerKey(config.getString("OAuthConsumerKey"))
-    .setOAuthConsumerSecret(config.getString("OAuthConsumerSecret"))
-    .setOAuthAccessToken(config.getString("OAuthAccessToken"))
-    .setOAuthAccessTokenSecret(config.getString("OAuthAccessSecret"))
-    .build()
 }
