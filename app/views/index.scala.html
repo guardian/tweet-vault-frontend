@@ -1,4 +1,4 @@
-@(users: String)
+@(users: List[String])
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -25,13 +25,9 @@
                     <button class="btn btn-default">Add</button>
                 </form>
                 <div class="list-group">
-                    <a href="#" class="list-group-item active">
-                        Cras justo odio
-                    </a>
-                    <a href="#" class="list-group-item">Silvio Berlusconi</a>
-                    <a href="#" class="list-group-item">Famous person</a>
-                    <a href="#" class="list-group-item">Nigel Farage</a>
-                    <a href="#" class="list-group-item">ISIS fighter</a>
+                    @for(user <- users) {
+                        <a href="#" class="twitter-user list-group-item">@user</a>
+                    }
                 </div>
             </div>
             <div class="col-sm-8">
@@ -42,12 +38,8 @@
                     </div>
                     <button class="btn btn-default">Search</button>
                 </form>
-                <ul class="list-group">
-                    <li class="list-group-item">Here's a tweet!</li>
-                    <li class="list-group-item">Something I said</li>
-                    <li class="list-group-item">I regret saying this!</li>
-                    <li class="list-group-item">Offensive comment which I deleted</li>
-                    <li class="list-group-item">Tweet tweet tweet tweet tweet</li>
+                <ul class="user-tweets list-group">
+
                 </ul>
             </div>
         </div>

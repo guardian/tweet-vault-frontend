@@ -12,7 +12,7 @@ import services._
 class Application extends Controller {
 
   def index = Action {
-    Ok(views.html.index(""))
+    Ok(views.html.index(ElasticSearchClient.getUsers))
   }
 
   def searchUsers(q: String) = Action {
@@ -37,6 +37,24 @@ class Application extends Controller {
       Json.obj("screenName" -> JsString(user.getScreenName))
     })
     Ok(json)
+  }
+
+  def getUsers = Action {
+    Ok(Json.obj("users" -> ElasticSearchClient.getUsers.toString))
+  }
+
+  def getTweets(q: String) = Action {
+    val tweets = ElasticSearchClient.getTweets(q)
+
+    val json = JsArray(tweets map {tweet =>
+      Json.obj("text" -> JsString(tweet))
+    })
+    Ok(Json.obj("tweets" -> json))
+  }
+
+  def getTweetsHtml(user: String) = Action {
+    val tweets = ElasticSearchClient.getTweets(user)
+    Ok(views.html.tweets(tweets))
   }
 
 }

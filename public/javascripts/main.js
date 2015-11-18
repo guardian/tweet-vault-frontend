@@ -14,3 +14,9 @@ $('#twitter-username').typeahead(null, {
   display: 'screenName',
   source: twitterUsers
 });
+
+$('.twitter-user').click(function() {
+  $(this).toggleClass('active');
+  $(this).siblings().removeClass('active');
+  $('.user-tweets').load('/get-tweets-html?user='+$(this).text());
+});

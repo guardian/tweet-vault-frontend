@@ -3,6 +3,7 @@ package services
 import org.elasticsearch.action.update.UpdateRequest
 import org.elasticsearch.client.transport.TransportClient
 import org.elasticsearch.common.transport.InetSocketTransportAddress
+import org.elasticsearch.index.query.QueryBuilders
 import org.json4s.native.JsonMethods._
 import org.json4s._
 import twitter4j.{Status, ResponseList}
@@ -30,13 +31,16 @@ object ElasticSearchClient {
     ).toList
   }
 
-  def putTweet(id: Long, json: String): Unit = {
-    val updateRequest = new UpdateRequest(indexName, "tweet", id.toString).doc(json)
-    updateRequest.docAsUpsert(true)
-    client.update(updateRequest).get()
-  }
-
-  def putTimeLine(tweets: ResponseList[Status]) = {
+  def getTweets(user: String): List[String] = {
+    val searchRequest = client.prepareSearch(indexName).setTypes("tweet")
+    val mqp = QueryBuilders.matchQuery("username", user)
+    searchRequest.setQuery(mqp)
+    searchRequest.execute().actionGet().getHits.map(
+      hit => {
+        val json = parse(hit.getSourceAsString)
+        (json \\ "text").extract[String]
+      }
+    ).toList
   }
 
 }
