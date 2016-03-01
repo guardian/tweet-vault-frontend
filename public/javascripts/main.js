@@ -9,6 +9,10 @@ var twitterUsers = new Bloodhound({
   }
 });
 
+function refreshTweets(user) {
+  $('.user-tweets').load('/get-tweets-html?user='+user);
+}
+
 $('#twitter-username').typeahead(null, {
   name: 'users',
   display: 'screenName',
@@ -16,9 +20,13 @@ $('#twitter-username').typeahead(null, {
 });
 
 $('.twitter-users').click('.twitter-user', function(e) {
-  $(e.target).toggleClass('active');
+  $(e.target).addClass('active');
   $(e.target).siblings().removeClass('active');
-  $('.user-tweets').load('/get-tweets-html?user='+$(e.target).text());
+  refreshTweets($(e.target).text());
+});
+
+$('.refresh-tweets').click(function() {
+  refreshTweets($('.twitter-user.active').text());
 });
 
 $('.add-user').click(function() {
