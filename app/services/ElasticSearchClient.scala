@@ -34,7 +34,6 @@ object ElasticSearchClient {
   val client = new TransportClient()
     .addTransportAddress(new InetSocketTransportAddress(Config.values.getString("ElasticSearch.Address"), Config.values.getString("ElasticSearch.Port").toInt))
 
-  // TODO: this is probably redundant now? to be merged with following method
   def getUsers: List[String] = {
     client.prepareSearch(indexName).setTypes("user").execute().actionGet().getHits.flatMap(
       hit => {
@@ -43,24 +42,6 @@ object ElasticSearchClient {
       }
     ).toList
   }
-
-  def getAllUsers: List[User] = {
-    client.prepareSearch(indexName).setTypes("user").execute().actionGet().getHits.map(
-      hit => {
-        val user = userFromJson(hit.getId, hit.getSourceAsString)
-        Logger.debug(s"Got user ${user}")
-        user
-      }
-    ).toList
-  }
-
-  def userFromJson(userId: String, userJson: String): User = {
-    val json = parse(userJson)
-    val name = (json \\ "name").extract[String]
-    val userNames = (json \\ "usernames").extract[List[String]]
-    User(userId, name, userNames)
-  }
-
 
   def getTweets(user: String): List[Tweet] = {
     val searchRequest = client.prepareSearch(indexName).setTypes("tweet")
@@ -131,11 +112,6 @@ object ElasticSearchClient {
     val updateRequest = new UpdateRequest(indexName, "tweet", tweet.getId.toString).doc(document)
     updateRequest.docAsUpsert(true)
     client.update(updateRequest).get()
-  }
-
-  def getUserId(username: String): Long = {
-    val user = twitter.showUser(username)
-    user.getId
   }
 }
 
