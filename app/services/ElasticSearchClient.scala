@@ -113,6 +113,16 @@ object ElasticSearchClient {
     updateRequest.docAsUpsert(true)
     client.update(updateRequest).get()
   }
+
+  def markAsDeleted(tweetId: Long) = {
+    val document = XContentFactory.jsonBuilder()
+      .startObject()
+      .field("status", "deleted")
+      .endObject()
+    val updateRequest = new UpdateRequest(indexName, "tweet", tweetId.toString).doc(document)
+    updateRequest.docAsUpsert(true)
+    client.update(updateRequest).get()
+  }
 }
 
 case class Tweet(text: String, status: String)

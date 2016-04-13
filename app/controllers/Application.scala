@@ -4,8 +4,6 @@ import com.typesafe.config.ConfigFactory
 import play.api._
 import play.api.libs.json._
 import play.api.mvc._
-import twitter4j._
-import twitter4j.conf.ConfigurationBuilder
 import scala.collection.JavaConversions._
 import services._
 
@@ -31,7 +29,7 @@ class Application extends Controller {
 //      )
 //    )
 
-    val users = Twitter.getUsers(q)
+    val users = services.Twitter.getUsers(q)
 
     val json = JsArray(users map {user =>
       Json.obj("screenName" -> JsString(user.getScreenName))
@@ -64,21 +62,14 @@ class Application extends Controller {
 
   def addUser(user: String) = Action {
     ElasticSearchClient.addUser(user)
+    TweetListener.updateStream
     Ok(Json.obj("users" -> ElasticSearchClient.getUsers.toString))
   }
 
 }
 
-object Twitter {
-  def getTweets = {
-    val twitter = TwitterFactory.getSingleton()
-    val query = new Query("source:twitter4j yusukey")
-    val result = twitter.search(query)
-    result.getTweets()
-  }
 
-  def getUsers(query: String) = {
-    val twitter = (new TwitterFactory(Config.twitter)).getInstance()
-    twitter.searchUsers(query, 0)
-  }
-}
+
+
+
+

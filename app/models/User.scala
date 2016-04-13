@@ -1,5 +1,4 @@
-package services
-
+package models
 
 case class User(elasticSearchId: String, name: String, userNames: List[String]) {
 
