@@ -1,4 +1,4 @@
-## Elasticsearch
+## Elasticsearch
 
 ### Install Elasticsearch on OS X
 
